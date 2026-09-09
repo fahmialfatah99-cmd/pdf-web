@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import FileDropZone from '../components/FileDropZone';
+import FileInfo from '../components/FileInfo';
 import { saveAs } from 'file-saver';
 
 export default function CompressPDF() {
@@ -21,28 +22,18 @@ export default function CompressPDF() {
   const handleCompress = async () => {
     if (!file) return;
     setProcessing(true);
-
     try {
       const pdfBytes = await file.arrayBuffer();
       const pdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-      
-      // Remove metadata to reduce size
       pdf.setTitle('');
       pdf.setAuthor('');
       pdf.setSubject('');
       pdf.setKeywords([]);
       pdf.setProducer('');
       pdf.setCreator('');
-
-      const compressedBytes = await pdf.save({
-        useObjectStreams: true,
-        addDefaultPage: false,
-        objectsPerTick: 100,
-      });
-
+      const compressedBytes = await pdf.save({ useObjectStreams: true, addDefaultPage: false, objectsPerTick: 100 });
       setCompressedSize(compressedBytes.length);
       setDone(true);
-
       const blob = new Blob([compressedBytes as unknown as BlobPart], { type: 'application/pdf' });
       saveAs(blob, `compressed-${file.name}`);
     } catch (error) {
@@ -59,48 +50,37 @@ export default function CompressPDF() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
+    <div className="max-w-3xl mx-auto animate-fade-in-up">
+      <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Compress PDF</h2>
-        <p className="text-slate-400">Reduce your PDF file size by optimizing the document structure.</p>
+        <p className="text-[14px] text-zinc-400">Reduce your PDF file size by optimizing the document structure.</p>
       </div>
 
       {!file ? (
-        <FileDropZone
-          onFilesSelected={handleFileSelected}
-          multiple={false}
-          label="Drop PDF file here"
-          description="Select a PDF to compress"
-          icon="📦"
-        />
+        <FileDropZone onFilesSelected={handleFileSelected} multiple={false} label="Drop PDF file here" description="Select a PDF to compress" icon="📦" />
       ) : (
-        <div className="glass-card rounded-2xl p-6 glow-border">
-          <div className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
-            <span className="text-2xl">📄</span>
-            <div className="flex-1">
-              <p className="text-white font-medium">{file.name}</p>
-              <p className="text-sm text-slate-400">{(originalSize / 1024).toFixed(1)} KB</p>
-            </div>
-            <button
-              onClick={() => { setFile(null); setDone(false); }}
-              className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm"
-            >
-              Change
-            </button>
-          </div>
+        <div className="glass-card rounded-2xl p-6 border border-white/[0.04] animate-scale-in">
+          <FileInfo fileName={file.name} fileSize={originalSize} onChange={() => { setFile(null); setDone(false); }} />
 
           {done && (
-            <div className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/30">
+            <div className="mb-6 p-5 rounded-xl bg-green-500/[0.05] border border-green-500/10 animate-scale-in">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-400 font-semibold">✅ Compression Complete!</p>
-                  <p className="text-sm text-slate-400 mt-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
+                      <svg className="w-3 h-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    </div>
+                    <p className="text-[13px] font-semibold text-green-400">Compression Complete!</p>
+                  </div>
+                  <p className="text-[12px] text-zinc-500">
                     {(originalSize / 1024).toFixed(1)} KB → {(compressedSize / 1024).toFixed(1)} KB
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-green-400">{getReduction()}%</p>
-                  <p className="text-xs text-slate-400">reduced</p>
+                  <p className="text-3xl font-bold text-green-400">{getReduction()}%</p>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-wider">reduced</p>
                 </div>
               </div>
             </div>
@@ -109,9 +89,9 @@ export default function CompressPDF() {
           <button
             onClick={handleCompress}
             disabled={processing}
-            className="w-full btn-primary py-3 rounded-xl text-white font-semibold disabled:opacity-50"
+            className="w-full btn-primary py-3.5 rounded-xl text-white font-semibold text-[14px] disabled:opacity-40"
           >
-            {processing ? '⏳ Compressing...' : '📦 Compress PDF'}
+            <span>{processing ? 'Compressing...' : 'Compress PDF'}</span>
           </button>
         </div>
       )}

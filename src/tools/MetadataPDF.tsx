@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import FileDropZone from '../components/FileDropZone';
+import FileInfo from '../components/FileInfo';
 import { saveAs } from 'file-saver';
 
 export default function MetadataPDF() {
   const [file, setFile] = useState<File | null>(null);
-  const [metadata, setMetadata] = useState({
-    title: '',
-    author: '',
-    subject: '',
-    keywords: '',
-    creator: '',
-    producer: '',
-  });
+  const [metadata, setMetadata] = useState({ title: '', author: '', subject: '', keywords: '', creator: '', producer: '' });
   const [pageCount, setPageCount] = useState(0);
   const [processing, setProcessing] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -26,7 +20,6 @@ export default function MetadataPDF() {
       const pdfBytes = await pdfFile.arrayBuffer();
       const pdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
       setPageCount(pdf.getPageCount());
-      
       setMetadata({
         title: pdf.getTitle() || '',
         author: pdf.getAuthor() || '',
@@ -35,26 +28,21 @@ export default function MetadataPDF() {
         creator: pdf.getCreator() || '',
         producer: pdf.getProducer() || '',
       });
-    } catch {
-      alert('Failed to read PDF');
-    }
+    } catch { alert('Failed to read PDF'); }
   };
 
   const handleSave = async () => {
     if (!file) return;
     setProcessing(true);
-
     try {
       const pdfBytes = await file.arrayBuffer();
       const pdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
-
       pdf.setTitle(metadata.title);
       pdf.setAuthor(metadata.author);
       pdf.setSubject(metadata.subject);
       pdf.setKeywords(metadata.keywords.split(',').map(k => k.trim()));
       pdf.setCreator(metadata.creator);
       pdf.setProducer(metadata.producer);
-
       const resultBytes = await pdf.save();
       const blob = new Blob([resultBytes as unknown as BlobPart], { type: 'application/pdf' });
       saveAs(blob, `metadata-updated-${file.name}`);
@@ -62,56 +50,48 @@ export default function MetadataPDF() {
     } catch (error) {
       console.error('Save failed:', error);
       alert('Failed to save metadata');
-    } finally {
-      setProcessing(false);
-    }
+    } finally { setProcessing(false); }
   };
 
   const fields = [
-    { key: 'title', label: 'Title', icon: '📝', placeholder: 'Document title' },
-    { key: 'author', label: 'Author', icon: '👤', placeholder: 'Document author' },
-    { key: 'subject', label: 'Subject', icon: '📋', placeholder: 'Document subject' },
-    { key: 'keywords', label: 'Keywords', icon: '🏷️', placeholder: 'keyword1, keyword2, keyword3' },
-    { key: 'creator', label: 'Creator', icon: '🛠️', placeholder: 'Application that created the PDF' },
-    { key: 'producer', label: 'Producer', icon: '⚙️', placeholder: 'PDF producer' },
-  ] as const;
+    { key: 'title' as const, label: 'Title', icon: '📝', placeholder: 'Document title' },
+    { key: 'author' as const, label: 'Author', icon: '👤', placeholder: 'Document author' },
+    { key: 'subject' as const, label: 'Subject', icon: '📋', placeholder: 'Document subject' },
+    { key: 'keywords' as const, label: 'Keywords', icon: '🏷️', placeholder: 'keyword1, keyword2, keyword3' },
+    { key: 'creator' as const, label: 'Creator', icon: '🛠️', placeholder: 'Application that created the PDF' },
+    { key: 'producer' as const, label: 'Producer', icon: '⚙️', placeholder: 'PDF producer' },
+  ];
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
+    <div className="max-w-3xl mx-auto animate-fade-in-up">
+      <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Edit PDF Metadata</h2>
-        <p className="text-slate-400">View and edit document properties of your PDF.</p>
+        <p className="text-[14px] text-zinc-400">View and edit document properties of your PDF.</p>
       </div>
 
       {!file ? (
-        <FileDropZone
-          onFilesSelected={handleFileSelected}
-          multiple={false}
-          label="Drop PDF file here"
-          description="Select a PDF to edit metadata"
-          icon="📝"
-        />
+        <FileDropZone onFilesSelected={handleFileSelected} multiple={false} label="Drop PDF file here" description="Select a PDF to edit metadata" icon="📝" />
       ) : (
-        <div className="glass-card rounded-2xl p-6 glow-border">
-          <div className="flex items-center gap-3 mb-6 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
-            <span className="text-2xl">📄</span>
-            <div className="flex-1">
-              <p className="text-white font-medium">{file.name}</p>
-              <p className="text-sm text-slate-400">{pageCount} pages • {(file.size / 1024).toFixed(1)} KB</p>
-            </div>
-            <button onClick={() => { setFile(null); setSaved(false); }} className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm">Change</button>
-          </div>
+        <div className="glass-card rounded-2xl p-6 border border-white/[0.04] animate-scale-in">
+          <FileInfo fileName={file.name} pageCount={pageCount} fileSize={file.size} onChange={() => { setFile(null); setSaved(false); }} />
 
           {saved && (
-            <div className="mb-4 p-3 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 text-sm">
-              ✅ Metadata saved and file downloaded!
+            <div className="mb-5 p-4 rounded-xl bg-green-500/[0.05] border border-green-500/10 animate-scale-in">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                </div>
+                <p className="text-[13px] font-medium text-green-400">Metadata saved and file downloaded!</p>
+              </div>
             </div>
           )}
 
           <div className="space-y-4">
             {fields.map(field => (
               <div key={field.key}>
-                <label className="text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                <label className="text-[12px] font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                   <span>{field.icon}</span>
                   {field.label}
                 </label>
@@ -120,17 +100,13 @@ export default function MetadataPDF() {
                   value={metadata[field.key]}
                   onChange={(e) => setMetadata(prev => ({ ...prev, [field.key]: e.target.value }))}
                   placeholder={field.placeholder}
-                  className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl premium-input text-white text-[14px] placeholder-zinc-600 focus:outline-none"
                 />
               </div>
             ))}
 
-            <button
-              onClick={handleSave}
-              disabled={processing}
-              className="w-full btn-primary py-3 rounded-xl text-white font-semibold disabled:opacity-50"
-            >
-              {processing ? '⏳ Saving...' : '💾 Save Metadata'}
+            <button onClick={handleSave} disabled={processing} className="w-full btn-primary py-3.5 rounded-xl text-white font-semibold text-[14px] disabled:opacity-40">
+              <span>{processing ? 'Saving...' : 'Save Metadata'}</span>
             </button>
           </div>
         </div>

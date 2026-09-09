@@ -55,10 +55,10 @@ export default function MergePDF() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
+    <div className="max-w-3xl mx-auto animate-fade-in-up">
+      <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Merge PDF Files</h2>
-        <p className="text-slate-400">Combine multiple PDF documents into a single file. Drag to reorder.</p>
+        <p className="text-[14px] text-zinc-400">Combine multiple PDF documents into a single file. Drag to reorder.</p>
       </div>
 
       <FileDropZone
@@ -69,45 +69,63 @@ export default function MergePDF() {
       />
 
       {files.length > 0 && (
-        <div className="mt-6 glass-card rounded-2xl p-6 glow-border">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Files to Merge ({files.length})</h3>
+        <div className="mt-6 glass-card rounded-2xl p-6 border border-white/[0.04] animate-scale-in">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-[14px] font-semibold text-white">Files to Merge</h3>
+                <p className="text-[11px] text-zinc-500">{files.length} files selected</p>
+              </div>
+            </div>
             <button
               onClick={() => setFiles([])}
-              className="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm hover:bg-red-500/20 transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-red-500/[0.07] border border-red-500/10 text-red-400 text-[12px] font-medium hover:bg-red-500/[0.12] transition-colors"
             >
               Clear All
             </button>
           </div>
 
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
             {files.map((file, index) => (
-              <div key={index} className="flex items-center gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                <span className="text-lg">📄</span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{file.name}</p>
-                  <p className="text-xs text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
+              <div key={index} className="flex items-center gap-3 p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-white/[0.08] transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[12px] font-bold text-indigo-400">{index + 1}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-medium text-white truncate">{file.name}</p>
+                  <p className="text-[11px] text-zinc-500">{(file.size / 1024).toFixed(1)} KB</p>
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => moveFile(index, 'up')}
                     disabled={index === 0}
-                    className="w-7 h-7 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-30 flex items-center justify-center text-xs text-slate-300"
+                    className="w-7 h-7 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-20 flex items-center justify-center text-zinc-400 transition-colors"
                   >
-                    ↑
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => moveFile(index, 'down')}
                     disabled={index === files.length - 1}
-                    className="w-7 h-7 rounded-lg bg-slate-700 hover:bg-slate-600 disabled:opacity-30 flex items-center justify-center text-xs text-slate-300"
+                    className="w-7 h-7 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] disabled:opacity-20 flex items-center justify-center text-zinc-400 transition-colors"
                   >
-                    ↓
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
                   </button>
                   <button
                     onClick={() => removeFile(index)}
-                    className="w-7 h-7 rounded-lg bg-red-500/20 hover:bg-red-500/30 flex items-center justify-center text-xs text-red-400"
+                    className="w-7 h-7 rounded-lg bg-red-500/[0.07] hover:bg-red-500/[0.12] flex items-center justify-center text-red-400 transition-colors"
                   >
-                    ✕
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -115,20 +133,23 @@ export default function MergePDF() {
           </div>
 
           {processing && (
-            <div className="mt-4">
-              <div className="h-2 rounded-full bg-slate-700 overflow-hidden">
+            <div className="mt-5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[12px] text-zinc-400">Processing...</span>
+                <span className="text-[12px] font-medium text-indigo-400">{progress}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
                 <div className="h-full progress-bar rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
               </div>
-              <p className="text-sm text-slate-400 mt-2 text-center">Processing... {progress}%</p>
             </div>
           )}
 
           <button
             onClick={handleMerge}
             disabled={files.length < 2 || processing}
-            className="mt-4 w-full btn-primary py-3 rounded-xl text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-5 w-full btn-primary py-3.5 rounded-xl text-white font-semibold text-[14px] disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {processing ? '⏳ Merging...' : `📑 Merge ${files.length} Files`}
+            <span>{processing ? 'Merging Files...' : `Merge ${files.length} Files`}</span>
           </button>
         </div>
       )}
