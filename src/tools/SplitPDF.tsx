@@ -104,7 +104,7 @@ export default function SplitPDF() {
                   onClick={() => setSplitMode('each')}
                   className={`p-4 rounded-xl border text-left transition-all ${splitMode === 'each' ? 'bg-indigo-500/[0.07] border-indigo-500/20 text-white' : 'bg-white/[0.02] border-white/[0.04] text-zinc-400 hover:border-white/[0.08]'}`}
                 >
-                  <div className="text-lg mb-1">📄</div>
+                  <div className="text-[20px] mb-1">📄</div>
                   <p className="text-[13px] font-semibold">Each Page</p>
                   <p className="text-[11px] text-zinc-500 mt-0.5">Split into separate files</p>
                 </button>
@@ -112,7 +112,7 @@ export default function SplitPDF() {
                   onClick={() => setSplitMode('range')}
                   className={`p-4 rounded-xl border text-left transition-all ${splitMode === 'range' ? 'bg-indigo-500/[0.07] border-indigo-500/20 text-white' : 'bg-white/[0.02] border-white/[0.04] text-zinc-400 hover:border-white/[0.08]'}`}
                 >
-                  <div className="text-lg mb-1">📑</div>
+                  <div className="text-[20px] mb-1">📑</div>
                   <p className="text-[13px] font-semibold">Custom Ranges</p>
                   <p className="text-[11px] text-zinc-500 mt-0.5">Define page ranges</p>
                 </button>

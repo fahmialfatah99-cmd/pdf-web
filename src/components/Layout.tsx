@@ -87,7 +87,7 @@ export default function Layout({ children, currentTool, onToolChange, sidebarOpe
                       onClick={() => onToolChange(tool.id)}
                       className={`sidebar-item w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left group ${currentTool === tool.id ? 'active text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[13px] transition-all ${currentTool === tool.id ? 'bg-indigo-500/15' : 'bg-white/[0.02] group-hover:bg-white/[0.05]'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-[16px] transition-all ${currentTool === tool.id ? 'bg-indigo-500/15' : 'bg-white/[0.02] group-hover:bg-white/[0.05]'}`}>
                         {tool.icon}
                       </div>
                       <span className="text-[13px] font-medium">{tool.name}</span>
