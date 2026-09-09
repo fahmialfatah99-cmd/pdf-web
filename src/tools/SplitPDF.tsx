@@ -3,6 +3,7 @@ import { PDFDocument } from 'pdf-lib';
 import FileDropZone from '../components/FileDropZone';
 import FileInfo from '../components/FileInfo';
 import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
 
 export default function SplitPDF() {
   const [file, setFile] = useState<File | null>(null);
@@ -47,14 +48,15 @@ export default function SplitPDF() {
     try {
       const pdfBytes = await file.arrayBuffer();
       const sourcePdf = await PDFDocument.load(pdfBytes);
+      const zip = new JSZip();
+      
       if (splitMode === 'each') {
         for (let i = 0; i < sourcePdf.getPageCount(); i++) {
           const newPdf = await PDFDocument.create();
           const [page] = await newPdf.copyPages(sourcePdf, [i]);
           newPdf.addPage(page);
           const bytes = await newPdf.save();
-          const blob = new Blob([bytes as unknown as BlobPart], { type: 'application/pdf' });
-          saveAs(blob, `page-${i + 1}.pdf`);
+          zip.file(`page-${i + 1}.pdf`, bytes as unknown as BlobPart);
         }
       } else {
         const ranges = parseRange(rangeInput, sourcePdf.getPageCount());
@@ -66,10 +68,13 @@ export default function SplitPDF() {
           const pages = await newPdf.copyPages(sourcePdf, pageIndices);
           pages.forEach(page => newPdf.addPage(page));
           const bytes = await newPdf.save();
-          const blob = new Blob([bytes as unknown as BlobPart], { type: 'application/pdf' });
-          saveAs(blob, `split-${r + 1}_pages-${start + 1}-to-${end + 1}.pdf`);
+          zip.file(`split-${r + 1}_pages-${start + 1}-to-${end + 1}.pdf`, bytes as unknown as BlobPart);
         }
       }
+      
+      // Generate and download ZIP file
+      const content = await zip.generateAsync({ type: 'blob' });
+      saveAs(content, `${file.name.replace('.pdf', '')}-split.zip`);
     } catch (error) {
       console.error('Split failed:', error);
       alert('Failed to split PDF');
