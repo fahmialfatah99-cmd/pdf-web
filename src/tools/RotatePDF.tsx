@@ -97,7 +97,7 @@ export default function RotatePDF() {
                     onClick={() => setRotation(item.angle)}
                     className={`p-4 rounded-xl border text-center transition-all ${rotation === item.angle ? 'bg-indigo-500/[0.07] border-indigo-500/20 text-white' : 'bg-white/[0.02] border-white/[0.04] text-zinc-400 hover:border-white/[0.08]'}`}
                   >
-                    <div className="text-2xl mb-1">{item.icon}</div>
+                    <div className="text-[20px] mb-1">{item.icon}</div>
                     <p className="text-[13px] font-semibold">{item.label}</p>
                   </button>
                 ))}

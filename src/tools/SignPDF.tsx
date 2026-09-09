@@ -126,11 +126,11 @@ export default function SignPDF() {
               <label className="text-[12px] font-semibold text-zinc-400 uppercase tracking-wider mb-3 block">Signature Method</label>
               <div className="grid grid-cols-2 gap-3">
                 <button onClick={() => setDrawMode('draw')} className={`p-4 rounded-xl border text-left transition-all ${drawMode === 'draw' ? 'bg-indigo-500/[0.07] border-indigo-500/20 text-white' : 'bg-white/[0.02] border-white/[0.04] text-zinc-400 hover:border-white/[0.08]'}`}>
-                  <div className="text-lg mb-1">✏️</div>
+                  <div className="text-[20px] mb-1">✏️</div>
                   <p className="text-[13px] font-semibold">Draw Signature</p>
                 </button>
                 <button onClick={() => setDrawMode('upload')} className={`p-4 rounded-xl border text-left transition-all ${drawMode === 'upload' ? 'bg-indigo-500/[0.07] border-indigo-500/20 text-white' : 'bg-white/[0.02] border-white/[0.04] text-zinc-400 hover:border-white/[0.08]'}`}>
-                  <div className="text-lg mb-1">📁</div>
+                  <div className="text-[20px] mb-1">📁</div>
                   <p className="text-[13px] font-semibold">Upload Image</p>
                 </button>
               </div>
