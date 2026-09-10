@@ -13,6 +13,7 @@ import ExtractPages from './tools/ExtractPages';
 import SignPDF from './tools/SignPDF';
 import MetadataPDF from './tools/MetadataPDF';
 import DeletePages from './tools/DeletePages';
+import PDFToExcel from './tools/PDFToExcel';
 
 export type ToolId = 
   | 'home' 
@@ -27,7 +28,8 @@ export type ToolId =
   | 'extract' 
   | 'sign' 
   | 'metadata'
-  | 'delete';
+  | 'delete'
+  | 'pdf-to-excel';
 
 export interface ToolInfo {
   id: ToolId;
@@ -46,6 +48,7 @@ export const tools: ToolInfo[] = [
   { id: 'rotate', name: 'Rotate PDF', description: 'Rotate PDF pages in any direction', icon: '🔄', color: 'from-green-500 to-emerald-600', category: 'Organize' },
   { id: 'compress', name: 'Compress PDF', description: 'Reduce PDF file size', icon: '📦', color: 'from-orange-500 to-amber-600', category: 'Optimize' },
   { id: 'image-to-pdf', name: 'Image to PDF', description: 'Convert images to PDF document', icon: '🖼️', color: 'from-pink-500 to-rose-600', category: 'Convert' },
+  { id: 'pdf-to-excel', name: 'PDF to Excel', description: 'Convert PDF tables to Excel', icon: '📊', color: 'from-emerald-500 to-teal-600', category: 'Convert' },
   { id: 'watermark', name: 'Add Watermark', description: 'Add text watermark to PDF', icon: '💧', color: 'from-teal-500 to-cyan-600', category: 'Edit' },
   { id: 'page-numbers', name: 'Page Numbers', description: 'Add page numbers to PDF', icon: '🔢', color: 'from-indigo-500 to-violet-600', category: 'Edit' },
   { id: 'sign', name: 'Sign PDF', description: 'Add signature to PDF document', icon: '✍️', color: 'from-yellow-500 to-orange-600', category: 'Edit' },
@@ -64,6 +67,7 @@ function App() {
       case 'split': return <SplitPDF />;
       case 'compress': return <CompressPDF />;
       case 'image-to-pdf': return <ImageToPDF />;
+      case 'pdf-to-excel': return <PDFToExcel />;
       case 'rotate': return <RotatePDF />;
       case 'watermark': return <WatermarkPDF />;
       case 'page-numbers': return <PageNumbers />;
