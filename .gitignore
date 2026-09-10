@@ -1,13 +1,9 @@
-```
 # Dependencies
 node_modules/
 
 # Build artifacts
 dist/
 build/
-*.js
-*.ts
-*.tsx
 
 # Logs and temp files
 *.log
@@ -41,4 +37,3 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
-```
